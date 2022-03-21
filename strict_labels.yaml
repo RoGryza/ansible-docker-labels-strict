@@ -1,0 +1,36 @@
+- name: Test strict labels
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Create dummy image
+    community.docker.docker_image:
+      name: dummy
+      build:
+        path: .
+      source: build
+  - name: Run dummy image
+    community.docker.docker_container:
+      name: dummy
+      image: dummy
+      state: started
+      comparisons:
+        labels: strict
+      labels:
+        dummy: "something"
+  - name: Run dummy image again - should be no diff
+    community.docker.docker_container:
+      name: dummy
+      image: dummy
+      state: started
+      comparisons:
+        labels: strict
+      labels:
+        dummy: "something"
+  - name: Cleanup container
+    community.docker.docker_container:
+      name: dummy 
+      state: absent
+  - name: Cleanup image
+    community.docker.docker_image:
+      name: dummy 
+      state: absent

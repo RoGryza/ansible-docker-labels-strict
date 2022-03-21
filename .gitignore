@@ -1,0 +1,4 @@
+.direnv
+.envrc
+ansible_collections
+collections/*.tar.gz
